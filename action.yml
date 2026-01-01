@@ -28,7 +28,11 @@ inputs:
     required: false
 outputs:
   response:
-    description: 'Response of AI Agent'
+    description: 'Response from CodeBuddy Agent with code review analysis'
+  agent:
+    description: 'Name of the agent that performed the review (CodeBuddy)'
+  agent_version:
+    description: 'Version of the CodeBuddy agent'
 runs:
   using: 'docker'
   image: 'Dockerfile'

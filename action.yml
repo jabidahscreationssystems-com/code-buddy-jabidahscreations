@@ -26,6 +26,10 @@ inputs:
   total_comments:
     description: 'Total of comments by file'
     required: false
+  api_endpoint:
+    description: 'CodeBuddy API endpoint URL'
+    required: false
+    default: 'https://codebuddy-api.vercel.app/v1/code-review-agent'
 outputs:
   response:
     description: 'Response from CodeBuddy Agent with code review analysis'
@@ -44,3 +48,4 @@ runs:
     - ${{ inputs.code_buddy_key }}
     - ${{ inputs.stack }}
     - ${{ inputs.total_comments }}
+    - ${{ inputs.api_endpoint }}

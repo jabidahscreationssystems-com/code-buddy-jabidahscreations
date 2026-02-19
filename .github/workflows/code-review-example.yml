@@ -1,0 +1,46 @@
+# Example workflow for CodeBuddy AI Code Review
+# This is a template - copy this to your repository and configure as needed
+
+name: CodeBuddy AI Code Review
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  code_review:
+    runs-on: ubuntu-latest
+    name: AI Code Review with CodeBuddy
+    
+    # Only run if the PR is not from a fork (for security)
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    
+    steps:
+      - name: CodeBuddy Agent Code Review
+        id: code_review
+        uses: jabidahscreationssystems-com/code-buddy-jabidahscreations@main
+        with:
+          owner: "${{ github.repository_owner }}"
+          repository: "${{ github.event.repository.name }}"
+          pull_request_number: "${{ github.event.pull_request.number }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          code_buddy_key: "${{ secrets.CODE_BUDDY_KEY }}"
+          stack: "Node.js, React, TypeScript"  # Update with your stack
+          total_comments: 3  # Optional: limit comments per file
+          # api_endpoint: "https://custom-api.com/v1/code-review-agent"  # Optional: custom endpoint
+      
+      - name: Display Review Results
+        if: always()
+        run: |
+          echo "🤖 Review completed by: ${{ steps.code_review.outputs.agent }}"
+          echo "📌 Agent version: ${{ steps.code_review.outputs.agent_version }}"
+          echo "✅ Code review completed successfully!"
+      
+      - name: Handle Review Failure
+        if: failure()
+        run: |
+          echo "❌ Code review failed. Please check the logs above for details."
+          echo "Common issues:"
+          echo "  - Invalid CODE_BUDDY_KEY"
+          echo "  - API endpoint not accessible"
+          echo "  - Network connectivity issues"

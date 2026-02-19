@@ -1,0 +1,23 @@
+# Test files
+/tmp/
+*.tmp
+test_*.sh
+test_*.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+logs/

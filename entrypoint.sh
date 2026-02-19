@@ -55,13 +55,6 @@ fi
 echo "📊 Analyzing PR #$PULL_REQUEST_NUMBER in $OWNER/$REPOSITORY"
 echo "🔗 Using API endpoint: $API_ENDPOINT"
 
-# Function to escape JSON strings properly
-escape_json() {
-  local input="$1"
-  # Use jq to safely escape the string
-  printf '%s' "$input" | jq -Rs .
-}
-
 # Construct the payload for the request using jq for safe JSON construction
 PAYLOAD=$(jq -n \
   --arg owner "$OWNER" \
@@ -105,7 +98,8 @@ SUCCESS=false
 while [[ $RETRY_COUNT -lt $MAX_RETRIES ]]; do
   if [[ $RETRY_COUNT -gt 0 ]]; then
     echo "⏳ Retry attempt $RETRY_COUNT of $MAX_RETRIES..."
-    sleep $((RETRY_COUNT * 2)) # Exponential backoff
+    # Exponential backoff: 2^RETRY_COUNT seconds (2, 4, 8 seconds)
+    sleep $((2 ** RETRY_COUNT))
   fi
 
   # Make the API call with timeout and capture both response and HTTP code
